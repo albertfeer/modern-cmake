@@ -1,0 +1,13 @@
+*.DS_Store
+/_book/
+/node_modules/
+/public/
+/book.pdf
+/modern-cmake.pdf
+/book.mobi
+/book.epub
+# pixi environments
+.pixi
+*.egg-info
+_build
+build

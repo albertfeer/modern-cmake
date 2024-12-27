@@ -1,0 +1,29 @@
+default:
+  image: ghcr.io/prefix-dev/pixi:latest
+  before_script:
+    - apt-get update && apt-get install -y texlive texlive-xetex texlive-fonts-extra latexmk
+
+variables:
+  DEBIAN_FRONTEND: noninteractive
+
+test:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - pixi run test
+    - pixi run build
+    - pixi run pdf
+
+pages:
+  stage: deploy
+  publish: _build/html
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - pixi run build
+    - pixi run pdf
+    - cp _build/latex/modern-cmake.pdf _build/html/
+  artifacts:
+    paths:
+      - _build/html
+    expire_in: 1 week
